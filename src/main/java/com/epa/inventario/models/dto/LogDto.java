@@ -4,21 +4,21 @@ import com.epa.inventario.models.enums.TipoTransaccion;
 
 import java.util.Date;
 
-public class Log {
+public class LogDto {
     private String id;
     private Date fecha;
     private String idProducto;
     private String tipo;
     private Object data;
 
-    private Log() {
+    private LogDto() {
     }
 
     public static class Builder {
-        private Log log;
+        private LogDto log;
 
         public Builder(String idProducto) {
-            log = new Log();
+            log = new LogDto();
             // agrega la fecha
             log.fecha = new Date();
             // agrega el id del producto
@@ -35,7 +35,7 @@ public class Log {
             return this;
         }
 
-        public Log build() {
+        public LogDto build() {
             if (log.idProducto == null) {
                 throw new IllegalStateException("El ID del producto es obligatorio");
             }

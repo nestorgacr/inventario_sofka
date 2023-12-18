@@ -1,24 +1,23 @@
 package com.epa.inventario.models.dto;
 
 import com.epa.inventario.models.enums.TipoMensaje;
-import com.epa.inventario.models.enums.TipoTransaccion;
 
 import java.util.Date;
 
-public class Error {
+public class ErrorDto {
     private String id;
     private Date fecha;
     private String tipo;
     private Object data;
 
-    private Error() {
+    private ErrorDto() {
     }
 
     public static class Builder {
-        private Error log;
+        private ErrorDto log;
 
         public Builder() {
-            log = new Error();
+            log = new ErrorDto();
             // agrega la fecha
             log.fecha = new Date();
         }
@@ -33,7 +32,7 @@ public class Error {
             return this;
         }
 
-        public Error build() {
+        public ErrorDto build() {
             return log;
         }
     }
