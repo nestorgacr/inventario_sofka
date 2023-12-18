@@ -18,7 +18,7 @@ public class RabbitMqPublisher {
     @Autowired
     private Gson gson;
 
-    public void publishTransaccion(String message, LogDto data){
+    public void publishTransaccion(LogDto data){
 
         sender
                 .send(Mono.just(new OutboundMessage(RabbitConfig.EXCHANGE_NAME,
