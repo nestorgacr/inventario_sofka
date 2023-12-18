@@ -2,15 +2,13 @@ package com.epa.inventario.usecase;
 
 import com.epa.inventario.drivenAdapters.bus.RabbitMqPublisher;
 import com.epa.inventario.drivenAdapters.repositorios.IProductoRepository;
-import com.epa.inventario.models.dto.CreateProductRequestDto;
-import com.epa.inventario.models.dto.ErrorDto;
-import com.epa.inventario.models.dto.LogDto;
-import com.epa.inventario.models.dto.ProductoDto;
+import com.epa.inventario.models.dto.*;
 import com.epa.inventario.models.enums.TipoMensaje;
 import com.epa.inventario.models.enums.TipoTransaccion;
 import com.epa.inventario.models.mongo.Producto;
 import com.epa.inventario.models.mongo.Transaccion;
 import com.epa.inventario.utils.ProductoUtil;
+import com.epa.inventario.utils.TransaccionUtil;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -41,9 +39,10 @@ public class CrearProductoUseCase implements Function<CreateProductRequestDto, M
 
         Transaccion transaccion = new Transaccion();
         transaccion.setFecha(new Date());
-        transaccion.setTipo(TipoTransaccion.INGRESO.toString());
+        transaccion.setTipo(TipoTransaccion.PRODUCTO_NUEVO.toString());
         transaccion.setPrecio(createProductRequestDto.getPrecio());
         transaccion.setCantidad(createProductRequestDto.getExistencia());
+
 
         List<Transaccion> list = new ArrayList<>();
         list.add(transaccion);
@@ -52,11 +51,16 @@ public class CrearProductoUseCase implements Function<CreateProductRequestDto, M
 
         return repositorio.save(producto)
                 .doOnSuccess(data -> {
+
+                    TransaccionDto tran = TransaccionUtil.entityToDto(transaccion);
+                    tran.setIdProducto(data.getId());
+
                     LogDto log = new LogDto.Builder(data.getId())
-                            .addTipo(TipoTransaccion.INGRESO)
+                            .addTipo(TipoTransaccion.PRODUCTO_NUEVO)
                             .addData(data)
                             .build();
                     eventBus.publishTransaccion(log);
+
                 }).doOnError(
                         error -> {
                             ErrorDto errorDto = new ErrorDto.Builder()

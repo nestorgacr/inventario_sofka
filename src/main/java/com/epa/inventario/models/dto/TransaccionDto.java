@@ -6,6 +6,7 @@ import java.util.Objects;
 
 public class TransaccionDto {
     private String id;
+    private String idProducto;
     private Date fecha;
     private int cantidad;
     private double precio;
@@ -54,15 +55,24 @@ public class TransaccionDto {
         this.tipo = tipo;
     }
 
+
+    public String getIdProducto() {
+        return idProducto;
+    }
+
+    public void setIdProducto(String idProducto) {
+        this.idProducto = idProducto;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof TransaccionDto that)) return false;
-        return cantidad == that.cantidad && Double.compare(precio, that.precio) == 0 && Objects.equals(id, that.id) && Objects.equals(fecha, that.fecha) && Objects.equals(tipo, that.tipo);
+        return cantidad == that.cantidad && Double.compare(precio, that.precio) == 0 && Objects.equals(id, that.id) && Objects.equals(idProducto, that.idProducto) && Objects.equals(fecha, that.fecha) && Objects.equals(tipo, that.tipo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, fecha, cantidad, precio, tipo);
+        return Objects.hash(id, idProducto, fecha, cantidad, precio, tipo);
     }
 }

@@ -20,7 +20,7 @@ public class ProductoRouter {
         return RouterFunctions.route()
                 .path("/Producto", builder ->
                         builder
-                                .GET("/Crear", handler::crearProducto)
+                                .POST("/Crear", handler::crearProducto)
                 )
                 .build();
     }
