@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+
+  mongoDbInv:
+    image: mongo:7.0.4
+    container_name: inventario
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data:/data/db
+    networks:
+      - invNet
+
+  mongoDbLog:
+    image: mongo:7.0.4
+    container_name: inventarioLog
+    ports:
+      - "27018:27017"
+    volumes:
+      - ./data:/data/db
+    networks:
+      - invNet
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq_container_bank
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: rabbit_user
+      RABBITMQ_DEFAULT_PASS: b5x26z4p
+    networks:
+      - invNet
+
+networks:
+  invNet:
+
+volumes:
+  appInv:
