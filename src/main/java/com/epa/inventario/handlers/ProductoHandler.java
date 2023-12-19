@@ -4,6 +4,7 @@ import com.epa.inventario.models.dto.*;
 import com.epa.inventario.usecase.CrearProductoUseCase;
 import com.epa.inventario.usecase.InventarioPaginadoUseCase;
 import com.epa.inventario.usecase.RegistrarInventarioUseCase;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -23,13 +24,17 @@ public class ProductoHandler {
         this.inventarioPaginadoUseCase = inventarioPaginadoUseCase;
     }
 
-    public Mono<ServerResponse> crearProducto(ServerRequest request)
-    {
+    public Mono<ServerResponse> crearProducto(ServerRequest request) {
         return request.bodyToMono(CreateProductRequestDto.class).flatMap(
                 producto -> {
-                    Mono<ProductoDto>  temp =  crearProductoUseCase.apply(producto);
-                    return ServerResponse.ok()
-                            .body(temp, ProductoDto.class);
+                    return crearProductoUseCase.apply(producto)
+                            .flatMap(result -> {
+                                return ServerResponse.ok().bodyValue(result);
+                            })
+                            .onErrorResume(error -> {
+                                return ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                        .bodyValue(error.getMessage());
+                            });
                 }
         );
     }

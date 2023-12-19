@@ -72,7 +72,12 @@ public class CrearProductoUseCase implements Function<CreateProductRequestDto, M
 
                             eventBus.publishError(errorDto);
 
+                            throw new RuntimeException("Error al crear el producto");
+
+
                         }
+
+                      
                 )
                 .map(ProductoUtil::entityToDto);
 

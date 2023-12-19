@@ -43,7 +43,6 @@ public class ProductosUseCaseTest {
     @DisplayName("Usecase -> Crear producto")
     public void CrearProducto() {
 
-
         CreateProductRequestDto createProductRequestDto = new CreateProductRequestDto();
         createProductRequestDto.setNombre("test");
         createProductRequestDto.setExistencia(1000);
@@ -65,13 +64,10 @@ public class ProductosUseCaseTest {
         transaccion.setPrecio(100);
         transaccion.setCantidad(1000);
 
-
         producto.setTransacciones( List.of(transaccion));
-
 
         when(repository.save(any(Producto.class)))
                 .thenReturn(Mono.just(producto));
-
 
         TransaccionDto tran = TransaccionUtil.entityToDto(transaccion);
         tran.setIdProducto("1");
