@@ -21,6 +21,8 @@ public class ProductoRouter {
                 .path("/Producto", builder ->
                         builder
                                 .POST("/Crear", handler::crearProducto)
+                                .POST("/RegistrarInventario", handler::registrarInventario)
+                                .POST("/RegistrarInventarioMasivo", handler::registrarInventarioMasivo)
                 )
                 .build();
     }
