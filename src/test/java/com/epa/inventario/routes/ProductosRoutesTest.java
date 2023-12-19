@@ -4,6 +4,7 @@ import com.epa.inventario.handlers.ProductoHandler;
 import com.epa.inventario.models.dto.CreateProductRequestDto;
 import com.epa.inventario.models.dto.ProductoDto;
 import com.epa.inventario.usecase.CrearProductoUseCase;
+import com.epa.inventario.usecase.InventarioPaginadoUseCase;
 import com.epa.inventario.usecase.RegistrarInventarioUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,6 +26,8 @@ public class ProductosRoutesTest {
     @Mock
     private RegistrarInventarioUseCase registrarInventarioUseCase;
 
+    private InventarioPaginadoUseCase inventarioPaginadoUseCase;
+
     private ProductoHandler productoHandler;
 
     private ProductoRouter productoRouter;
@@ -33,7 +36,10 @@ public class ProductosRoutesTest {
 
     @BeforeEach
     void setUp(){
-        productoHandler = new ProductoHandler(  crearProductoUseCase, registrarInventarioUseCase);
+        productoHandler = new ProductoHandler(
+                crearProductoUseCase,
+                registrarInventarioUseCase,
+                inventarioPaginadoUseCase);
 
         productoRouter = new ProductoRouter(productoHandler);
 

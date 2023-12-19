@@ -36,6 +36,8 @@ public class CrearProductoUseCase implements Function<CreateProductRequestDto, M
         producto.setNombre(createProductRequestDto.getNombre());
         producto.setExistencia(createProductRequestDto.getExistencia());
         producto.setPrecio(createProductRequestDto.getPrecio());
+        producto.setDescuento(createProductRequestDto.getDescuento());
+        producto.setUnidadesMinimasDescuento(createProductRequestDto.getUnidadesMinimasDescuento());
 
         Transaccion transaccion = new Transaccion();
         transaccion.setFecha(new Date());

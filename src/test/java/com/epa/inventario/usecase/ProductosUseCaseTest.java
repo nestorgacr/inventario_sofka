@@ -18,6 +18,7 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.util.Date;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.willReturn;
@@ -65,7 +66,10 @@ public class ProductosUseCaseTest {
         transaccion.setCantidad(1000);
 
 
-        when(repository.save(producto))
+        producto.setTransacciones( List.of(transaccion));
+
+
+        when(repository.save(any(Producto.class)))
                 .thenReturn(Mono.just(producto));
 
 

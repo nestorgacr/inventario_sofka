@@ -8,22 +8,20 @@ import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
 @Configuration
-public class ProductoRouter {
+public class VentaRouter {
     private final ProductoHandler handler;
 
-    public ProductoRouter(ProductoHandler handler) {
+    public VentaRouter(ProductoHandler handler) {
         this.handler = handler;
     }
 
     @Bean
-    public RouterFunction<ServerResponse> routerFunctionProductos() {
+    public RouterFunction<ServerResponse> routerFunctionVentas() {
         return RouterFunctions.route()
-                .path("/Producto", builder ->
+                .path("/Venta", builder ->
                         builder
-                                .POST("/Crear", handler::crearProducto)
-                                .POST("/RegistrarInventario", handler::registrarInventario)
-                                .POST("/RegistrarInventarioMasivo", handler::registrarInventarioMasivo)
-                                .GET("/InventarioPaginado/{tamaño}/{pagina}", handler::obtenerProductoPaginado)
+                                .POST("/AlPorMenor", handler::crearProducto)
+                                .POST("/AlPorMayor", handler::registrarInventario)
                 )
                 .build();
     }

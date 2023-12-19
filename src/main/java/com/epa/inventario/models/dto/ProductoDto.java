@@ -8,6 +8,9 @@ public class ProductoDto {
     private String nombre;
     private double precio;
     private int existencia;
+
+    private double descuento;
+    private int unidadesMinimasDescuento;
     private List<TransaccionDto> transacciones;
 
     public ProductoDto() {
@@ -53,15 +56,32 @@ public class ProductoDto {
         this.transacciones = transacciones;
     }
 
+
+    public double getDescuento() {
+        return descuento;
+    }
+
+    public void setDescuento(double descuento) {
+        this.descuento = descuento;
+    }
+
+    public int getUnidadesMinimasDescuento() {
+        return unidadesMinimasDescuento;
+    }
+
+    public void setUnidadesMinimasDescuento(int unidadesMinimasDescuento) {
+        this.unidadesMinimasDescuento = unidadesMinimasDescuento;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof ProductoDto that)) return false;
-        return Double.compare(precio, that.precio) == 0 && existencia == that.existencia && Objects.equals(id, that.id) && Objects.equals(nombre, that.nombre) && Objects.equals(transacciones, that.transacciones);
+        return Double.compare(precio, that.precio) == 0 && existencia == that.existencia && Double.compare(descuento, that.descuento) == 0 && unidadesMinimasDescuento == that.unidadesMinimasDescuento && Objects.equals(id, that.id) && Objects.equals(nombre, that.nombre) && Objects.equals(transacciones, that.transacciones);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nombre, precio, existencia, transacciones);
+        return Objects.hash(id, nombre, precio, existencia, descuento, unidadesMinimasDescuento, transacciones);
     }
 }

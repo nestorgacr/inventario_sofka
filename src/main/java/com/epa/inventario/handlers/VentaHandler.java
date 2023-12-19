@@ -11,13 +11,13 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
-public class ProductoHandler {
+public class VentaHandler {
     private final CrearProductoUseCase crearProductoUseCase;
     private final RegistrarInventarioUseCase registrarInventarioUseCase;
 
     private final InventarioPaginadoUseCase inventarioPaginadoUseCase;
 
-    public ProductoHandler(CrearProductoUseCase crearProductoUseCase, RegistrarInventarioUseCase registrarInventarioUseCase, InventarioPaginadoUseCase inventarioPaginadoUseCase) {
+    public VentaHandler(CrearProductoUseCase crearProductoUseCase, RegistrarInventarioUseCase registrarInventarioUseCase, InventarioPaginadoUseCase inventarioPaginadoUseCase) {
         this.crearProductoUseCase = crearProductoUseCase;
         this.registrarInventarioUseCase = registrarInventarioUseCase;
         this.inventarioPaginadoUseCase = inventarioPaginadoUseCase;
