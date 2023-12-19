@@ -10,10 +10,13 @@ public class TransaccionDto {
     private Date fecha;
     private int cantidad;
     private double precio;
+
+    private double descuento;
     private String tipo;
 
     public TransaccionDto() {
     }
+
 
     public String getId() {
         return id;
@@ -21,6 +24,14 @@ public class TransaccionDto {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getIdProducto() {
+        return idProducto;
+    }
+
+    public void setIdProducto(String idProducto) {
+        this.idProducto = idProducto;
     }
 
     public Date getFecha() {
@@ -47,6 +58,14 @@ public class TransaccionDto {
         this.precio = precio;
     }
 
+    public double getDescuento() {
+        return descuento;
+    }
+
+    public void setDescuento(double descuento) {
+        this.descuento = descuento;
+    }
+
     public String getTipo() {
         return tipo;
     }
@@ -55,24 +74,15 @@ public class TransaccionDto {
         this.tipo = tipo;
     }
 
-
-    public String getIdProducto() {
-        return idProducto;
-    }
-
-    public void setIdProducto(String idProducto) {
-        this.idProducto = idProducto;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof TransaccionDto that)) return false;
-        return cantidad == that.cantidad && Double.compare(precio, that.precio) == 0 && Objects.equals(id, that.id) && Objects.equals(idProducto, that.idProducto) && Objects.equals(fecha, that.fecha) && Objects.equals(tipo, that.tipo);
+        return cantidad == that.cantidad && Double.compare(precio, that.precio) == 0 && Double.compare(descuento, that.descuento) == 0 && Objects.equals(id, that.id) && Objects.equals(idProducto, that.idProducto) && Objects.equals(fecha, that.fecha) && Objects.equals(tipo, that.tipo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, idProducto, fecha, cantidad, precio, tipo);
+        return Objects.hash(id, idProducto, fecha, cantidad, precio, descuento, tipo);
     }
 }

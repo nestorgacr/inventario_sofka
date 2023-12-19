@@ -22,7 +22,7 @@ public class VentaRouter {
                 .path("/Venta", builder ->
                         builder
                                 .POST("/AlPorMenor", handler::registrarVentaAlPorMenor)
-                                //.POST("/AlPorMayor", handler::registrarInventario)
+                                .POST("/AlPorMayor", handler::registrarVentaAlPorMayor)
                 )
                 .build();
     }

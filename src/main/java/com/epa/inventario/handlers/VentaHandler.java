@@ -1,10 +1,7 @@
 package com.epa.inventario.handlers;
 
 import com.epa.inventario.models.dto.*;
-import com.epa.inventario.usecase.CrearProductoUseCase;
-import com.epa.inventario.usecase.InventarioPaginadoUseCase;
-import com.epa.inventario.usecase.RegistrarInventarioUseCase;
-import com.epa.inventario.usecase.RegistrarVentaUseCase;
+import com.epa.inventario.usecase.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -15,22 +12,28 @@ import reactor.core.publisher.Mono;
 public class VentaHandler {
     private final RegistrarVentaUseCase registrarVentaUseCase;
 
-    public VentaHandler(RegistrarVentaUseCase registrarVentaUseCase) {
+    private final RegistrarVentaAlPorMayorUseCase registrarVentaAlPorMayorUseCase;
 
+    public VentaHandler(RegistrarVentaUseCase registrarVentaUseCase, RegistrarVentaAlPorMayorUseCase registrarVentaAlPorMayorUseCase) {
         this.registrarVentaUseCase = registrarVentaUseCase;
+        this.registrarVentaAlPorMayorUseCase = registrarVentaAlPorMayorUseCase;
     }
 
 
+    public Mono<ServerResponse> registrarVentaAlPorMenor(ServerRequest request) {
+        return request.bodyToFlux(VentaRequestDto.class)
+                .flatMap(registrarVentaUseCase)
+                .collectList()
+                .flatMap(transaccionDtos -> ServerResponse.ok()
+                        .bodyValue(transaccionDtos));
+    }
 
-    public Mono<ServerResponse> registrarVentaAlPorMenor(ServerRequest request)
-    {
-        return request.bodyToMono(ActualizarInventarioRequestDto.class).flatMap(
-                transaccion -> {
-                    Mono<TransaccionDto>  temp =  registrarVentaUseCase.apply(transaccion);
-                    return ServerResponse.ok()
-                            .body(temp, ProductoDto.class);
-                }
-        );
+    public Mono<ServerResponse> registrarVentaAlPorMayor(ServerRequest request) {
+        return request.bodyToFlux(VentaRequestDto.class)
+                .flatMap(registrarVentaAlPorMayorUseCase)
+                .collectList()
+                .flatMap(transaccionDtos -> ServerResponse.ok()
+                        .bodyValue(transaccionDtos));
     }
 
 

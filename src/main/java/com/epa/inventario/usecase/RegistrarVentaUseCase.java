@@ -2,10 +2,7 @@ package com.epa.inventario.usecase;
 
 import com.epa.inventario.drivenAdapters.bus.RabbitMqPublisher;
 import com.epa.inventario.drivenAdapters.repositorios.IProductoRepository;
-import com.epa.inventario.models.dto.ActualizarInventarioRequestDto;
-import com.epa.inventario.models.dto.ErrorDto;
-import com.epa.inventario.models.dto.LogDto;
-import com.epa.inventario.models.dto.TransaccionDto;
+import com.epa.inventario.models.dto.*;
 import com.epa.inventario.models.enums.TipoMensaje;
 import com.epa.inventario.models.enums.TipoTransaccion;
 import com.epa.inventario.models.mongo.Transaccion;
@@ -18,7 +15,7 @@ import java.util.UUID;
 import java.util.function.Function;
 
 @Service
-public class RegistrarVentaUseCase implements Function<ActualizarInventarioRequestDto, Mono<TransaccionDto>>
+public class RegistrarVentaUseCase implements Function<VentaRequestDto, Mono<TransaccionDto>>
 {
     private final IProductoRepository repositorio;
 
@@ -30,23 +27,24 @@ public class RegistrarVentaUseCase implements Function<ActualizarInventarioReque
     }
 
     @Override
-    public Mono<TransaccionDto> apply(ActualizarInventarioRequestDto data) {
+    public Mono<TransaccionDto> apply(VentaRequestDto data) {
 
         Transaccion transaccion = new Transaccion();
         transaccion.setIdProducto(data.getIdProducto());
-        transaccion.setPrecio(data.getPrecio());
-        transaccion.setCantidad(data.getExistencia());
+
+        transaccion.setCantidad(data.getCantidad());
         transaccion.setFecha(new Date());
         transaccion.setTipo(TipoTransaccion.VENTA.toString());
+        transaccion.setDescuento(0);
 
         UUID uuid = UUID.randomUUID();
         transaccion.setId(uuid.toString());
 
         return repositorio.findById(data.getIdProducto())
                 .flatMap(producto -> {
+                    transaccion.setPrecio(producto.getPrecio());
                     producto.getTransacciones().add(transaccion);
-                    producto.setPrecio(data.getPrecio());
-                    producto.setExistencia(producto.getExistencia() - data.getExistencia());
+                    producto.setExistencia(producto.getExistencia() - data.getCantidad());
                     return repositorio.save(producto)
                             .doOnSuccess(inv -> {
                                 LogDto log = new LogDto.Builder(data.getIdProducto())

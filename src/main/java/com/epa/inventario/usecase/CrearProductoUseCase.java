@@ -44,6 +44,7 @@ public class CrearProductoUseCase implements Function<CreateProductRequestDto, M
         transaccion.setTipo(TipoTransaccion.PRODUCTO_NUEVO.toString());
         transaccion.setPrecio(createProductRequestDto.getPrecio());
         transaccion.setCantidad(createProductRequestDto.getExistencia());
+        transaccion.setDescuento(0);
 
 
         List<Transaccion> list = new ArrayList<>();
