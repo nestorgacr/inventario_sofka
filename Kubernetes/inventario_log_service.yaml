@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: inventario-log-service
+spec:
+  selector:
+    role: inventario-log
+  ports:
+    - name: app-port
+      port: 8087
+      targetPort: 8087
+      nodePort: 30005
+  type: LoadBalancer
+
+     

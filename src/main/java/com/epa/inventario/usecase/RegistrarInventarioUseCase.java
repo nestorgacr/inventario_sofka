@@ -42,6 +42,14 @@ public class RegistrarInventarioUseCase implements Function<ActualizarInventario
 
         return repositorio.findById(data.getIdProducto())
                 .flatMap(producto -> {
+
+                    if (producto == null) {
+                        // Handle the case when no record is found by adding your logic here
+                        // You might want to throw an exception, return a specific response, etc.
+                        // For example, you can throw a NotFoundException
+                        return Mono.error(new RuntimeException("Producto no encontrado"));
+                    }
+
                     producto.getTransacciones().add(transaccion);
                     producto.setPrecio(data.getPrecio());
                     producto.setExistencia(producto.getExistencia() + data.getExistencia());

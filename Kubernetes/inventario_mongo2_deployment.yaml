@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: inventario-mongo2-deployment
+spec:
+  serviceName: mongodb2-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inventario-api-mongo2
+  template:
+    metadata:
+      labels:
+        app: inventario-api-mongo2
+    spec:
+      containers:
+      - name: inventario-api-mongo2
+        image: mongo:7.0.4
+        ports:
+        - containerPort: 27017
+        volumeMounts:
+        - name: mongodb-data2
+          mountPath: /data/db
+  volumeClaimTemplates:
+  - metadata:
+      name: mongodb-data2
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
