@@ -41,20 +41,19 @@ public class ProductoHandler {
         );
     }
 
-    public Mono<ServerResponse> registrarInventario(ServerRequest request)
-    {
+    public Mono<ServerResponse> registrarInventario(ServerRequest request) {
         return request.bodyToMono(ActualizarInventarioRequestDto.class).flatMap(
-                transaccion -> {
-                    Mono<TransaccionDto>  temp =  registrarInventarioUseCase.apply(transaccion)
-                            .onErrorMap(
-                                    DatosNoEncontrados.class, ex -> new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                                            ex.getLocalizedMessage()
-                                    ));
-                    return ServerResponse.ok()
-                            .body(temp, ProductoDto.class);
-                }
+                transaccion -> registrarInventarioUseCase.apply(transaccion)
+                        .flatMap(transaccionDto ->
+                                ServerResponse.ok()
+                                        .bodyValue(transaccionDto))
+                        .onErrorResume(DatosNoEncontrados.class, ex ->
+                                ServerResponse.status(HttpStatus.BAD_REQUEST)
+                                        .bodyValue(ex.getMessage())
+                        )
         );
     }
+
 
     public Mono<ServerResponse> registrarInventarioMasivo(ServerRequest request) {
         return request.bodyToFlux(ActualizarInventarioRequestDto.class)
@@ -62,10 +61,10 @@ public class ProductoHandler {
                 .collectList()
                 .flatMap(transaccionDtos -> ServerResponse.ok()
                         .bodyValue(transaccionDtos))
-                .onErrorMap(
-                        DatosNoEncontrados.class, ex -> new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                                ex.getLocalizedMessage()
-                        ));
+                .onErrorResume(DatosNoEncontrados.class, ex ->
+                        ServerResponse.status(HttpStatus.BAD_REQUEST)
+                                .bodyValue(ex.getMessage())
+                );
     }
 
     public Mono<ServerResponse> obtenerProductoPaginado(ServerRequest request)

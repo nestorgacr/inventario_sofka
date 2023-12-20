@@ -29,10 +29,10 @@ public class VentaHandler {
                 .collectList()
                 .flatMap(transaccionDtos -> ServerResponse.ok()
                         .bodyValue(transaccionDtos))
-                .onErrorMap(
-                        DatosNoEncontrados.class, ex -> new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                                ex.getLocalizedMessage()
-                        ));
+                .onErrorResume(DatosNoEncontrados.class, ex ->
+                        ServerResponse.status(HttpStatus.BAD_REQUEST)
+                                .bodyValue(ex.getMessage())
+                );
     }
 
     public Mono<ServerResponse> registrarVentaAlPorMayor(ServerRequest request) {
@@ -41,10 +41,10 @@ public class VentaHandler {
                 .collectList()
                 .flatMap(transaccionDtos -> ServerResponse.ok()
                         .bodyValue(transaccionDtos))
-                .onErrorMap(
-                        DatosNoEncontrados.class, ex -> new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                                ex.getLocalizedMessage()
-                        ));
+                .onErrorResume(DatosNoEncontrados.class, ex ->
+                        ServerResponse.status(HttpStatus.BAD_REQUEST)
+                                .bodyValue(ex.getMessage())
+                );
     }
 
 

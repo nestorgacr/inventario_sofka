@@ -74,9 +74,9 @@ public class RegistrarVentaAlPorMayorUseCase implements Function<VentaRequestDto
                         Mono.defer(() -> {
                             eventBus.publishError(new ErrorDto.Builder()
                                     .addTipo(TipoMensaje.ERROR)
-                                    .addData("El producto a actualizar no existe").build());
+                                    .addData("No se puede registrar la venta, el producto no existe:" + data.getIdProducto()).build());
 
-                            return Mono.error( new DatosNoEncontrados("El producto a actualizar no existe"));
+                            return Mono.error( new DatosNoEncontrados("No se puede registrar la venta, el producto no existe:" + data.getIdProducto()));
                         } ));
     }
 

@@ -70,9 +70,9 @@ public class RegistrarInventarioUseCase implements Function<ActualizarInventario
                         Mono.defer(() -> {
                             eventBus.publishError(new ErrorDto.Builder()
                                     .addTipo(TipoMensaje.ERROR)
-                                    .addData("El producto a actualizar no existe").build());
+                                    .addData("El producto a actualizar no existe:" + data.getIdProducto()).build());
 
-                            return Mono.error( new DatosNoEncontrados("El producto a actualizar no existe"));
+                            return Mono.error( new DatosNoEncontrados("El producto a actualizar no existe:" + data.getIdProducto()));
                         } ));
 
     }
