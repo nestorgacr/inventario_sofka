@@ -1,5 +1,6 @@
 package com.epa.inventario.handlers;
 
+import com.epa.inventario.exception.DatosNoEncontrados;
 import com.epa.inventario.models.dto.*;
 import com.epa.inventario.usecase.CrearProductoUseCase;
 import com.epa.inventario.usecase.InventarioPaginadoUseCase;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -43,7 +45,11 @@ public class ProductoHandler {
     {
         return request.bodyToMono(ActualizarInventarioRequestDto.class).flatMap(
                 transaccion -> {
-                    Mono<TransaccionDto>  temp =  registrarInventarioUseCase.apply(transaccion);
+                    Mono<TransaccionDto>  temp =  registrarInventarioUseCase.apply(transaccion)
+                            .onErrorMap(
+                                    DatosNoEncontrados.class, ex -> new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                                            ex.getLocalizedMessage()
+                                    ));
                     return ServerResponse.ok()
                             .body(temp, ProductoDto.class);
                 }
@@ -55,7 +61,11 @@ public class ProductoHandler {
                 .flatMap(registrarInventarioUseCase)
                 .collectList()
                 .flatMap(transaccionDtos -> ServerResponse.ok()
-                        .bodyValue(transaccionDtos));
+                        .bodyValue(transaccionDtos))
+                .onErrorMap(
+                        DatosNoEncontrados.class, ex -> new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                                ex.getLocalizedMessage()
+                        ));
     }
 
     public Mono<ServerResponse> obtenerProductoPaginado(ServerRequest request)
@@ -67,7 +77,11 @@ public class ProductoHandler {
         int numeroPagina = Integer.parseInt(pagina);
         int tamanoPagina = Integer.parseInt(tamanno);
 
-      Flux<ProductoPaginadoDto> list = inventarioPaginadoUseCase.apply(numeroPagina, tamanoPagina);
+      Flux<ProductoPaginadoDto> list = inventarioPaginadoUseCase.apply(numeroPagina, tamanoPagina)
+              .onErrorMap(
+              DatosNoEncontrados.class, ex -> new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                      ex.getLocalizedMessage()
+              ));
 
         return ServerResponse.ok()
                 .body(list, ProductoPaginadoDto.class);

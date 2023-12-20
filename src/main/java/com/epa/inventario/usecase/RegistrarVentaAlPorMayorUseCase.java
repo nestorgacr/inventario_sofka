@@ -2,6 +2,7 @@ package com.epa.inventario.usecase;
 
 import com.epa.inventario.drivenAdapters.bus.RabbitMqPublisher;
 import com.epa.inventario.drivenAdapters.repositorios.IProductoRepository;
+import com.epa.inventario.exception.DatosNoEncontrados;
 import com.epa.inventario.models.dto.*;
 import com.epa.inventario.models.enums.TipoMensaje;
 import com.epa.inventario.models.enums.TipoTransaccion;
@@ -68,7 +69,15 @@ public class RegistrarVentaAlPorMayorUseCase implements Function<VentaRequestDto
                                     }
                             )
                             .map(savedProducto -> TransaccionUtil.entityToDto(transaccion));
-                });
+                })
+                .switchIfEmpty(
+                        Mono.defer(() -> {
+                            eventBus.publishError(new ErrorDto.Builder()
+                                    .addTipo(TipoMensaje.ERROR)
+                                    .addData("El producto a actualizar no existe").build());
+
+                            return Mono.error( new DatosNoEncontrados("El producto a actualizar no existe"));
+                        } ));
     }
 
 }
