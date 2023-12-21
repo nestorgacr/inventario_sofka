@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: inventario-log
-          image: nestorgacr/bank_account_service:kb
+          image: nestorgacr/inventario_log:latest
           ports:
             - containerPort: 8087
           env:

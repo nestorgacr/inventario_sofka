@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: inventario-api
-        image: nestorgacr/bank_account_app:kb
+        image: nestorgacr/inventario:latest
         ports:
           - containerPort: 8086
         env:

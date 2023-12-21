@@ -62,7 +62,7 @@ public class CrearProductoUseCase implements Function<CreateProductRequestDto, M
                             .addTipo(TipoTransaccion.PRODUCTO_NUEVO)
                             .addData(data)
                             .build();
-                    eventBus.publishTransaccion(log);
+                    //eventBus.publishTransaccion(log);
 
                 }).doOnError(
                         error -> {
